@@ -10,7 +10,8 @@ output:
 
 ## Loading and preprocessing the data
 
-```{r, echo=TRUE, message = FALSE}
+
+```r
 ## Loading the raw data
 activityRawData <- read.csv("./activity.csv")
 
@@ -24,7 +25,8 @@ The **mean** of the total number of steps taken per day is 10,766.19 steps and t
 
 The R code and the result are shown below:
 
-```{r, echo=TRUE, message = FALSE}
+
+```r
 ## Calculate the total number of steps taken per day
 totalSteps <- aggregate(activityRawData$steps, list(day = activityRawData$date), sum)
 
@@ -50,13 +52,16 @@ legend("topright",
        legend = c(paste("Mean  = ", round(meanValue,2)), paste("Median = ", medianValue)))
 ```
 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
+
 ## What is the average daily activity pattern?
 
 The **0835 interval** contains the maximum number of steps (206 steps) on average across all the days.
 
 The R code and the result are shown below:
 
-```{r, echo=TRUE, message = FALSE}
+
+```r
 ## Excluding the NA values
 missing <- is.na(activityRawData$steps)
 activityData <- activityRawData[!missing,]
@@ -78,13 +83,16 @@ axis(side=1, at=maxInterval)
 abline(v=maxInterval, col="blue", lty=2)
 ```
 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
+
 ## Imputing missing values
 
 The total number of missing values in the dataset is **2,304**, there are 8 days with 288 missing values for each day.
 
 The R code and the result are shown below:
 
-```{r, echo=TRUE, message = FALSE}
+
+```r
 ## Filtering only the rows with NA values
 missing <- is.na(activityRawData$steps)
 activityNA <- activityRawData[missing,]
@@ -119,11 +127,14 @@ text(seq(1,length(totalNA$day),by=1),
      cex=0.8)
 ```
 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
+
 Then, the missing values were filled in creating a new dataset. The strategy applied was the mean for that 5-minute interval. Using the new dataset a histogram was generated observing that these values differ from the estimates from the first part of the assignment. **The frecuency increased for 10,000 to 15,000 range steps taken per day, after imputing missing data.**
 
 The R code and the result are shown below:
 
-```{r, echo=TRUE, message = FALSE}
+
+```r
 ## Filtering only the rows with not NA values
 activityData <- activityRawData[!missing,]
 
@@ -177,13 +188,16 @@ legend("topright",
        legend = c(paste("Mean  = ", round(meanValue,2)), paste("Median = ", medianValue)))
 ```
 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
 There are differences in activity patterns between weekdays and weekends, the higher average steps taken per day is present in weekdays (between 0800 and 0900 interval), however during the day the average steps taken per day in weekends is higher than in weekdays.
 
 The R code and the result are shown below:
 
-```{r, echo=TRUE, message = FALSE}
+
+```r
 ## Adding the Type Day column
 newactivityData <- mutate(newactivityData, 
                           typeDay = ifelse(format(date,"%w") %in% c(0,6), "weekend", "weekday"))
@@ -203,3 +217,5 @@ q <- xyplot(x~interval | as.factor(typeDay),
             layout = c(1,2))
 print(q)
 ```
+
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
